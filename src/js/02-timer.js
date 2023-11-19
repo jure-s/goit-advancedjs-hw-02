@@ -3,35 +3,37 @@ import 'flatpickr/dist/flatpickr.min.css';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
+const btn = document.querySelector('[data-start]');
+const date = document.querySelector('#datetime-picker');
+const spans = document.querySelectorAll('.value');
+const day = document.querySelector('[data-days]');
+const hour = document.querySelector('[data-hours]');
+const min = document.querySelector('[data-minutes]');
+const sec = document.querySelector('[data-seconds]');
+
+btn.disabled = true;
+
 flatpickr('#datetime-picker', {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    const btn = document.querySelector('[data-start]');
     btn.disabled = selectedDates[0] <= Date.now();
-
+    const message = btn.disabled
+      ? 'Please choose a date in the future!'
+      : 'Let\'s go?';
+      
     iziToast.show({
       title: btn.disabled ? 'Error' : 'Success',
-      message: btn.disabled
-        ? 'Please choose a date in the future!'
-        : 'Lets go?',
+      message,
       position: 'topCenter',
       color: btn.disabled ? 'red' : 'green',
     });
   },
 });
 
-document.querySelector('[data-start]').addEventListener('click', () => {
-  const date = document.querySelector('#datetime-picker');
-  const spans = document.querySelectorAll('.value');
-  const day = document.querySelector('[data-days]');
-  const hour = document.querySelector('[data-hours]');
-  const min = document.querySelector('[data-minutes]');
-  const sec = document.querySelector('[data-seconds]');
-  const btn = document.querySelector('[data-start]');
-
+btn.addEventListener('click', () => {
   btn.disabled = true;
   date.disabled = true;
   spans.forEach(item => item.classList.toggle('end'));
